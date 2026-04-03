@@ -2,9 +2,29 @@
   "name": "csv-cli",
   "module": "src/index.ts",
   "type": "module",
-  "private": true,
+  "bin": {
+    "csv-cli": "bin/csv-cli"
+  },
+  "scripts": {
+    "build:darwin-arm64": "bun build src/index.ts --compile --outfile bin/csv-cli-darwin-arm64 --target=bun-darwin-arm64",
+    "build:linux-arm64": "bun build src/index.ts --compile --outfile bin/csv-cli-linux-arm64 --target=bun-linux-arm64",
+    "build:windows-arm64": "bun build src/index.ts --compile --outfile bin/csv-cli-windows-arm64 --target=bun-windows-arm64",
+    "build:darwin-x64": "bun build src/index.ts --compile --outfile bin/csv-cli-darwin-x64 --target=bun-darwin-x64",
+    "build:windows-x64": "bun build src/index.ts --compile --outfile bin/csv-cli-windows-x64 --target=bun-windows-x64",
+    "build:linux-x64": "bun build src/index.ts --compile --outfile bin/csv-cli-linux-x64 --target=bun-linux-x64",
+    "build:bin": "bun run build:darwin-arm64 && bun run build:linux-arm64 && bun run build:windows-arm64 && bun run build:darwin-x64 && bun run build:windows-x64 && build:linux-x64",
+    "build": "bun build src/index.ts --target node --outdir dist/",
+    "lint": "eslint src/",
+    "format": "prettier --write src/"
+  },
   "devDependencies": {
-    "@types/bun": "latest"
+    "@eslint/js": "^10.0.1",
+    "@types/bun": "latest",
+    "eslint": "^10.1.0",
+    "globals": "^17.4.0",
+    "jiti": "^2.6.1",
+    "prettier": "^3.8.1",
+    "typescript-eslint": "^8.58.0"
   },
   "peerDependencies": {
     "typescript": "^5"
