@@ -1,7 +1,7 @@
 import { createWriteStream, chmodSync } from "fs";
 import { pipeline } from "stream/promises";
 
-const VERSION = "1.0.0";
+const VERSION = "0.1.0";
 const REPO = "AstraBert/csv-cli";
 
 // Map Node's platform/arch to your compiled binary names
