@@ -1,15 +1,79 @@
 # csv-cli
 
-To install dependencies:
+A simple and straightforward CLI app to display CSV files as ASCII tables, written in TypeScript.
+
+Built on top of [sunbears](https://github.com/AstraBert/sunbears), a fast CSV data loader inspired by Polars and Pandas, written in Rust.
 
 ```bash
-bun install
+$~ csv-cli sample.csv
++------------------------------------------------------------+
+|                         sample.csv                         |
++----+-----+---------------+-------------------+-------------+
+| id | age |     name      |       email       |    city     |
++----+-----+---------------+-------------------+-------------+
+|  1 |  28 | Alice Johnson | alice@example.com |  New York   |
+|  2 |  34 | Bob Smith     | bob@example.com   | Los Angeles |
+|  3 |  22 | Carol White   | carol@example.com |   Chicago   |
+|  4 |  45 | David Brown   | david@example.com |   Houston   |
+|  5 |  31 | Eva Martinez  | eva@example.com   |   Phoenix   |
++----+-----+---------------+-------------------+-------------+
 ```
 
-To run:
+## Installation
+
+Install with:
 
 ```bash
-bun run index.ts
+npm i -g @cle-does-things/csv-cli
 ```
 
-This project was created using `bun init` in bun v1.3.9. [Bun](https://bun.com) is a fast all-in-one JavaScript runtime.
+Verify installation with:
+
+```bash
+csv-cli --help
+```
+
+> _Installation might fail without internet access, as it requires to download binaries from [GitHub Releases](https://github.com/AstraBert/csv-cli/releases)_
+
+## Usage
+
+`csv-cli` simply needs the path to the CSV file as positional arguments, and it will display the data contained in it as an ASCII table:
+
+```bash
+csv-cli sample.csv
+```
+
+## Development
+
+**Linting**
+
+```bash
+bun run format # prettier
+bun run lint # eslint ´
+```
+
+**Testing**
+
+Tests are defined in [index.test.ts](./src/index.test.ts):
+
+```bash
+bun test
+```
+
+**Building**
+
+Bundled as a JS file:
+
+```bash
+bun run build # -> dist/index.js
+```
+
+As a compiled binary:
+
+```bash
+bun run build:bin # -> bin/csv-cli-<os>-<arch>
+```
+
+## License
+
+MIT
