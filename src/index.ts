@@ -11,25 +11,32 @@ import {
 } from "@cle-does-things/sunbears";
 import { AlignmentEnum, AsciiTable3 } from "ascii-table3";
 
-function colToArray(
+export function colToArray(
   col: ColumnData,
   dt: DataType,
 ): string[] | number[] | boolean[] {
+  let arr;
   switch (dt) {
     case DataType.String:
-      return asStringArray(col)!;
+      arr = asStringArray(col)!;
+      break;
     case DataType.Float:
-      return asFloatArray(col)!;
+      arr = asFloatArray(col)!;
+      break;
     case DataType.Integer:
-      return asIntArray(col)!;
-    case DataType.Boolean:
-      return asBooleanArray(col)!;
+      arr = asIntArray(col)!;
+      break;
     default:
-      throw new Error(`Unexpected data type: ${dt}`);
+      arr = asBooleanArray(col)!;
+      break;
   }
+  if (arr) {
+    return arr;
+  }
+  throw new Error("Incorrect data type for the column");
 }
 
-function transformColumns(cols: (string[] | boolean[] | number[])[]) {
+export function transformColumns(cols: (string[] | boolean[] | number[])[]) {
   let i = 0;
   const matrix = [];
   while (i < cols[0]!.length) {
