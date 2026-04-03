@@ -7,8 +7,9 @@ on:
       - package.json
       - eslint.config.ts
       - tsconfig.json
-  branches:
-    - main
+  push:
+    branches:
+      - main
 
 jobs:
   test:
