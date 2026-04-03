@@ -1,6 +1,6 @@
 import { it, describe, expect } from "bun:test";
 import { transformColumns, colToArray } from ".";
-import { asFloatArray, ColumnData, DataType } from "@cle-does-things/sunbears";
+import { ColumnData, DataType } from "@cle-does-things/sunbears";
 
 describe("test column to Array", () => {
   it("string column", () => {
