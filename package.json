@@ -2,6 +2,7 @@
   "name": "@cle-does-things/csv-cli",
   "version": "0.1.0",
   "description": "Fast CLI to display CSV data as ASCII tables",
+  "type": "module",
   "bin": {
     "csv-cli": "bin/csv-cli"
   },
@@ -51,6 +52,7 @@
   },
   "dependencies": {
     "@cle-does-things/sunbears": "^1.0.0",
-    "ascii-table3": "^1.0.1"
+    "ascii-table3": "^1.0.1",
+    "commander": "^14.0.3"
   }
 }

@@ -1,5 +1,5 @@
 import { it, describe, expect } from "bun:test";
-import { transformColumns, colToArray } from ".";
+import { transformColumns, colToArray } from "./utils";
 import { ColumnData, DataType } from "@cle-does-things/sunbears";
 
 describe("test column to Array", () => {

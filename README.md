@@ -43,6 +43,24 @@ csv-cli --help
 csv-cli sample.csv
 ```
 
+Optionally, you can provide a maximum number of rows to display (`-l`/`--limit`, default is 100):
+
+```bash
+csv-cli sample.csv --limit 5
+```
+
+You can also specify a set of columns to display, as a comma-separated string (`-c`/`--columns`, defaults to show all columns):
+
+```bash
+csv-cli sample.csv --columns email,age
+```
+
+Lastly, you can show the time taken to display the table (`-t`, `--time`, defaults to not showing the time):
+
+```bash
+csv-cli sample.csv --time
+```
+
 ## Development
 
 **Linting**
@@ -54,7 +72,7 @@ bun run lint # eslint ´
 
 **Testing**
 
-Tests are defined in [index.test.ts](./src/index.test.ts):
+Tests are defined in [utils.test.ts](./src/utils.test.ts):
 
 ```bash
 bun test

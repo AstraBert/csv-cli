@@ -22,7 +22,16 @@ jobs:
         uses: oven-sh/setup-bun@v2
 
       - name: Build binaries
+        run: bun install --ignore-scripts
+
+      - name: Build binaries
         run: bun run build:bin
+
+      - name: Create GitHub Release
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: "bin/*"
+          generateReleaseNotes: true
 
       - name: Setup npm authentication
         run: echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
@@ -33,10 +42,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: npm publish --access public
-
-      - name: Create GitHub Release
-        uses: ncipollo/release-action@v1
-        with:
-          artifacts: "bin/*"
-          generateReleaseNotes: true
+        run: bun publish --ignore-scripts --access public
