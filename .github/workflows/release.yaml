@@ -33,6 +33,11 @@ jobs:
           artifacts: "bin/*"
           generateReleaseNotes: true
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "lts/*"
+
       - name: Setup npm authentication
         run: echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
         env:
@@ -42,4 +47,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: bun publish --ignore-scripts --config ~/.npmrc --access public
+        run: npm publish --access public
