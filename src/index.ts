@@ -1,70 +1,28 @@
 #!/usr/bin/env node
 
-import {
-  asBooleanArray,
-  asFloatArray,
-  asIntArray,
-  asStringArray,
-  DataType,
-  readCsv,
-  type ColumnData,
-} from "@cle-does-things/sunbears";
+import { readCsv, type ColumnData } from "@cle-does-things/sunbears";
 import { AlignmentEnum, AsciiTable3 } from "ascii-table3";
+import { Command } from "commander";
+import { colToArray, transformColumns } from "./utils";
 
-export function colToArray(
-  col: ColumnData,
-  dt: DataType,
-): string[] | number[] | boolean[] {
-  let arr;
-  switch (dt) {
-    case DataType.String:
-      arr = asStringArray(col)!;
-      break;
-    case DataType.Float:
-      arr = asFloatArray(col)!;
-      break;
-    case DataType.Integer:
-      arr = asIntArray(col)!;
-      break;
-    default:
-      arr = asBooleanArray(col)!;
-      break;
-  }
-  if (arr) {
-    return arr;
-  }
-  throw new Error("Incorrect data type for the column");
-}
-
-export function transformColumns(cols: (string[] | boolean[] | number[])[]) {
-  let i = 0;
-  const matrix = [];
-  while (i < cols[0]!.length) {
-    const row = [];
-    for (const c of cols) {
-      row.push(c[i]);
-    }
-    matrix.push(row);
-    i++;
-  }
-  return matrix;
-}
-
-function main(): void {
-  const firstArg = process.argv.at(2);
-  if (firstArg && (firstArg === "--help" || firstArg === "-h")) {
-    console.log(
-      "Read a CSV file and output it as a ASCII table to terminal.\n\nArguments:\n  PATH: the path to the CSV file to read\n\nOptions:\n  --help/-h: Print the help message.",
+function createTable(
+  csvPath: string,
+  limit: number,
+  columns: string[] | undefined,
+): void {
+  const df = readCsv(csvPath);
+  let cols: string[];
+  let colData: ColumnData[];
+  if (columns) {
+    const entries = Object.entries(df.columns).filter((o) =>
+      columns.includes(o[0]),
     );
-    return;
+    cols = entries.map((o) => o[0]);
+    colData = entries.map((o) => o[1]);
+  } else {
+    cols = Object.keys(df.columns);
+    colData = Object.values(df.columns);
   }
-  if (!firstArg) {
-    console.error("You should provide a CSV file path");
-    return;
-  }
-  const df = readCsv(firstArg);
-  const cols = Object.keys(df.columns);
-  const colData = Object.values(df.columns);
   const transformCols = [];
   let i = 0;
   while (i < colData.length) {
@@ -73,12 +31,51 @@ function main(): void {
     transformCols.push(arr);
     i++;
   }
-  const rowMatrix = transformColumns(transformCols);
-  const table = new AsciiTable3(firstArg)
+  let rowMatrix = transformColumns(transformCols);
+  if (rowMatrix.length > limit) {
+    rowMatrix = rowMatrix.slice(0, limit);
+  }
+  const table = new AsciiTable3(csvPath)
     .setHeading(...cols)
     .setAlign(cols.length, AlignmentEnum.CENTER)
     .addRowMatrix(rowMatrix);
   console.log(table.toString());
 }
 
-main();
+const program = new Command("csv-cli");
+
+program
+  .description("Parse a CSV file and represent it as a ASCII table")
+  .argument("<file>")
+  .option(
+    "-l, --limit <number>",
+    "maximum number of rows to display, defaults to 100.",
+    parseInt,
+  )
+  .option(
+    "-c, --columns <columns>",
+    "comma-separated list of columns to display. Displays all columns if not provided",
+  )
+  .option(
+    "-t, --time",
+    "display time taken to create the table. Defaults to false",
+  )
+  .action(
+    (
+      file: string,
+      opts: { limit?: number; columns?: string; time?: boolean },
+    ) => {
+      let cols: string[] | undefined = undefined;
+      if (opts.columns) {
+        cols = opts.columns.split(",");
+      }
+      const start = Date.now();
+      createTable(file, opts.limit ?? 100, cols);
+      const taken = Date.now() - start;
+      if (opts.time) {
+        console.log(`Done in: ${taken / 1000} s`);
+      }
+    },
+  );
+
+program.parse();
