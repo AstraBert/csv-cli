@@ -42,4 +42,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: bun publish --ignore-scripts --access public
+        run: bun publish --ignore-scripts --config ~/.npmrc --access public
